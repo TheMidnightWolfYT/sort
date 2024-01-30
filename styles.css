@@ -47,9 +47,3 @@ button {
         font-size: 14px; /* Smaller font size for buttons */
     }
 }
-
-/* Optional: Style for disabled buttons to indicate they are inactive */
-button:disabled {
-    background-color: #ccc;
-    color: #666;
-}
