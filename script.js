@@ -25,7 +25,7 @@ function displayArray() {
 }
 
 // Asynchronous Bubble Sort with animation
-async function bubbleSort(arr, delay = 100) {
+async function bubbleSort(arr, delay = 1000) {
     let len = arr.length;
     for (let i = 0; i < len; i++) {
         for (let j = 0; j < len - i - 1; j++) {
@@ -44,7 +44,7 @@ async function bubbleSort(arr, delay = 100) {
 }
 
 // Asynchronous Selection Sort with animation
-async function selectionSort(arr, delay = 100) {
+async function selectionSort(arr, delay = 1000) {
     let len = arr.length;
     for (let i = 0; i < len; i++) {
         let min = i;
@@ -67,7 +67,7 @@ async function selectionSort(arr, delay = 100) {
 }
 
 // Asynchronous Quick Sort with animation
-async function quickSort(arr, delay = 100, start = 0, end = arr.length - 1) {
+async function quickSort(arr, delay = 1000, start = 0, end = arr.length - 1) {
     if (start >= end) {
         return;
     }
