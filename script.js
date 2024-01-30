@@ -34,13 +34,10 @@ async function bubbleSort(arr, delay = 100) {
     for (let i = 0; i < len; i++) {
         for (let j = 0; j < len - i - 1; j++) {
             if (arr[j] > arr[j + 1]) {
-                // Swap elements
                 let tmp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = tmp;
-                // Update the display
                 displayArray(arr);
-                // Wait for a bit before moving on to the next iteration
                 await sleep(delay);
             }
         }
@@ -58,39 +55,35 @@ async function selectionSort(arr, delay = 100) {
             }
         }
         if (min !== i) {
-            // Swap elements
             let tmp = arr[i];
             arr[i] = arr[min];
             arr[min] = tmp;
-            // Update the display
             displayArray(arr);
-            // Wait for a bit before moving on to the next iteration
             await sleep(delay);
         }
     }
 }
 
-// Flag to check if it's the initial call of quickSort
-let isInitialCall = true;
-
-async function startQuickSort() {
-    if (isInitialCall) {
-        disableButtons();
-    }
-    try {
-        await quickSort(array);
-    } finally {
-        if (!isInitialCall) {
-            enableButtons();
+// Asynchronous Insertion Sort with animation
+async function insertionSort(arr, delay = 100) {
+    for (let i = 1; i < arr.length; i++) {
+        let key = arr[i];
+        let j = i - 1;
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+            displayArray(arr);
+            await sleep(delay);
         }
-        isInitialCall = true; // Reset the flag after sorting is done
+        arr[j + 1] = key;
+        displayArray(arr);
+        await sleep(delay);
     }
 }
 
+// Asynchronous Quick Sort with animation
 async function quickSort(arr, delay = 100, start = 0, end = arr.length - 1) {
     if (start < end) {
-        // If we're making a recursive call, set the flag to false
-        isInitialCall = false;
         let index = await partition(arr, start, end, delay);
         await Promise.all([
             quickSort(arr, delay, start, index - 1),
@@ -104,29 +97,77 @@ async function partition(arr, start, end, delay) {
     let pivotIndex = start; 
     for (let i = start; i < end; i++) {
         if (arr[i] < pivotValue) {
-            // Swap elements
             [arr[i], arr[pivotIndex]] = [arr[pivotIndex], arr[i]];
             pivotIndex++;
-            // Update the display
             displayArray(arr);
-            // Wait for a bit before moving on to the next iteration
             await sleep(delay);
         }
     }
-    // Swap the pivot element with the element at the pivot index
     [arr[pivotIndex], arr[end]] = [arr[end], arr[pivotIndex]];
-    // Update the display
     displayArray(arr);
     await sleep(delay);
     return pivotIndex;
 }
+// Asynchronous Merge Sort with animation
+async function mergeSort(arr, delay = 100, start = 0, end = arr.length - 1) {
+    if (start < end) {
+        const middle = Math.floor((start + end) / 2);
+        await mergeSort(arr, delay, start, middle);
+        await mergeSort(arr, delay, middle + 1, end);
+        await merge(arr, start, middle, end, delay);
+    }
+}
 
-// Function to disable buttons
+async function merge(arr, start, middle, end, delay) {
+    let n1 = middle - start + 1;
+    let n2 = end - middle;
+
+    let left = new Array(n1);
+    let right = new Array(n2);
+
+    for (let i = 0; i < n1; i++) {
+        left[i] = arr[start + i];
+    }
+    for (let j = 0; j < n2; j++) {
+        right[j] = arr[middle + 1 + j];
+    }
+
+    let i = 0, j = 0, k = start;
+    while (i < n1 && j < n2) {
+        if (left[i] <= right[j]) {
+            arr[k] = left[i];
+            i++;
+        } else {
+            arr[k] = right[j];
+            j++;
+        }
+        k++;
+        displayArray(arr);
+        await sleep(delay);
+    }
+
+    while (i < n1) {
+        arr[k] = left[i];
+        i++;
+        k++;
+        displayArray(arr);
+        await sleep(delay);
+    }
+
+    while (j < n2) {
+        arr[k] = right[j];
+        j++;
+        k++;
+        displayArray(arr);
+        await sleep(delay);
+    }
+}
+
+// Button control functions
 function disableButtons() {
     document.querySelectorAll('button').forEach(button => button.disabled = true);
 }
 
-// Function to enable buttons
 function enableButtons() {
     document.querySelectorAll('button').forEach(button => button.disabled = false);
 }
@@ -141,6 +182,24 @@ async function startBubbleSort() {
 async function startSelectionSort() {
     disableButtons();
     await selectionSort(array);
+    enableButtons();
+}
+
+async function startInsertionSort() {
+    disableButtons();
+    await insertionSort(array);
+    enableButtons();
+}
+
+async function startQuickSort() {
+    disableButtons();
+    await quickSort(array);
+    enableButtons();
+}
+
+async function startMergeSort() {
+    disableButtons();
+    await mergeSort(array);
     enableButtons();
 }
 
