@@ -80,7 +80,7 @@ async function startQuickSort() {
     try {
         await quickSort(array);
     } finally {
-        if (isInitialCall) {
+        if (!isInitialCall) {
             enableButtons();
         }
         isInitialCall = true; // Reset the flag after sorting is done
