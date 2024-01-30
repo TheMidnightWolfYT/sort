@@ -163,6 +163,54 @@ async function merge(arr, start, middle, end, delay) {
     }
 }
 
+// Heapify function used in Heap Sort
+async function heapify(arr, n, i, delay) {
+    let largest = i; // Initialize largest as root
+    let l = 2 * i + 1; // left = 2*i + 1
+    let r = 2 * i + 2; // right = 2*i + 2
+
+    // If left child is larger than root
+    if (l < n && arr[l] > arr[largest]) {
+        largest = l;
+    }
+
+    // If right child is larger than largest so far
+    if (r < n && arr[r] > arr[largest]) {
+        largest = r;
+    }
+
+    // If largest is not root
+    if (largest !== i) {
+        [arr[i], arr[largest]] = [arr[largest], arr[i]];
+        displayArray(arr);
+        await sleep(delay);
+
+        // Recursively heapify the affected sub-tree
+        await heapify(arr, n, largest, delay);
+    }
+}
+
+// Heap Sort function
+async function heapSort(arr, delay = 100) {
+    let n = arr.length;
+
+    // Build a maxheap
+    for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+        await heapify(arr, n, i, delay);
+    }
+
+    // One by one extract elements
+    for (let i = n - 1; i > 0; i--) {
+        // Move current root to end
+        [arr[0], arr[i]] = [arr[i], arr[0]];
+        displayArray(arr);
+        await sleep(delay);
+
+        // Call max heapify on the reduced heap
+        await heapify(arr, i, 0, delay);
+    }
+}
+
 // Button control functions
 function disableButtons() {
     document.querySelectorAll('button').forEach(button => button.disabled = true);
@@ -200,6 +248,13 @@ async function startQuickSort() {
 async function startMergeSort() {
     disableButtons();
     await mergeSort(array);
+    enableButtons();
+}
+
+// Function to start Heap Sort
+async function startHeapSort() {
+    disableButtons();
+    await heapSort(array);
     enableButtons();
 }
 
