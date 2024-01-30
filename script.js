@@ -21,7 +21,7 @@ function displayArray(arr) {
             const bar = document.createElement('div');
             bar.style.height = `${value * 3}px`;
             bar.style.width = '20px';
-            bar.style.margin = '0 2px';
+            bar.style.margin = '0 1px';
             bar.style.backgroundColor = 'dodgerblue';
             container.appendChild(bar);
         });
