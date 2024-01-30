@@ -73,7 +73,8 @@ async function selectionSort(arr, delay = 100) {
 // Asynchronous Quick Sort with animation
 async function quickSort(arr, delay = 100, start = 0, end = arr.length - 1) {
     if (start >= end) {
-        return enableButtons();
+        enableButtons()
+        return;
     }
     let index = await partition(arr, start, end, delay);
     await Promise.all([
