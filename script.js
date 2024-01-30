@@ -239,33 +239,70 @@ async function cocktailShakerSort(arr, delay = 100) {
     } while (swapped);
 }
 
-// Bitonic Sort
+// Function to check if a number is a power of 2
+function isPowerOfTwo(n) {
+    return n && (n & (n - 1)) === 0;
+}
+
+// Function to round up to the next power of 2
+function nextPowerOfTwo(number) {
+    let power = 1;
+    while (power < number) power *= 2;
+    return power;
+}
+
+// Main Bitonic Sort function
 async function bitonicSort(arr, low, count, dir, delay) {
     if (count > 1) {
-        var k = count / 2;
-        await bitonicSort(arr, low, k, 1, delay);
-        await bitonicSort(arr, low + k, k, 0, delay);
-        await bitonicMerge(arr, low, count, dir, delay);
+        let k = count / 2;
+        await bitonicSort(arr, low, k, 1, delay); // Sort in ascending order
+        await bitonicSort(arr, low + k, k, 0, delay); // Sort in descending order
+        await bitonicMerge(arr, low, count, dir, delay); // Merge whole array in ascending order
     }
 }
 
+// Bitonic Merge function
 async function bitonicMerge(arr, low, count, dir, delay) {
     if (count > 1) {
-        var k = count / 2;
-        for (var i = low; i < low + k; i++) {
-            await bitonicCompare(arr, i, i + k, dir, delay);
+        let k = count / 2;
+        for (let i = low; i < low + k; i++) {
+            await compareAndSwap(arr, i, i + k, dir);
+            displayArray(arr);
+            await sleep(delay);
         }
         await bitonicMerge(arr, low, k, dir, delay);
         await bitonicMerge(arr, low + k, k, dir, delay);
     }
 }
 
-async function bitonicCompare(arr, i, j, dir, delay) {
-    if (dir === (arr[i] > arr[j])) {
+// Compare and Swap function used by Bitonic Merge
+async function compareAndSwap(arr, i, j, dir) {
+    if ((dir === 1 && arr[i] > arr[j]) || (dir === 0 && arr[i] < arr[j])) {
         [arr[i], arr[j]] = [arr[j], arr[i]];
-        displayArray(arr);
-        await sleep(delay);
     }
+}
+
+// Start Bitonic Sort function
+async function startBitonicSort() {
+    disableButtons();
+    let maxInt = Number.MAX_SAFE_INTEGER;
+    let originalLength = array.length;
+    
+    // Check if the array length is a power of 2, if not, pad with maxInt
+    if (!isPowerOfTwo(array.length)) {
+        let paddedLength = nextPowerOfTwo(array.length);
+        array = [...array, ...Array(paddedLength - array.length).fill(maxInt)];
+    }
+    
+    await bitonicSort(array, 0, array.length, 1, 100);
+    
+    // If we padded the array, restore it to its original length
+    if (array.length > originalLength) {
+        array = array.slice(0, originalLength);
+    }
+    
+    displayArray(array); // Display the sorted array without the padding
+    enableButtons();
 }
 
 // Button control functions
