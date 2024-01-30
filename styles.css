@@ -1,8 +1,20 @@
 /* style.css */
 
+/* Base styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 #array-container {
-    width: 600px;
-    height: 400px;
+    width: 90%;
+    max-width: 600px;
+    height: 50vh;
+    max-height: 400px;
     display: flex;
     align-items: flex-end;
     margin: 20px auto;
@@ -12,10 +24,32 @@
 #array-container div {
     background-color: dodgerblue;
     margin: 2px;
-    width: 20px;
+    width: calc((100% - 60px) / 30); /* Calculate width dynamically */
 }
 
 button {
     margin: 10px;
-    color: black;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+/* Responsive design for smaller devices */
+@media (max-width: 600px) {
+    #array-container {
+        height: 40vh; /* Slightly smaller container for smaller screens */
+    }
+
+    #array-container div {
+        width: calc((100% - 30px) / 30); /* Slightly smaller bars to fit more */
+    }
+
+    button {
+        font-size: 14px; /* Smaller font size for buttons */
+    }
+}
+
+/* Optional: Style for disabled buttons to indicate they are inactive */
+button:disabled {
+    background-color: #ccc;
+    color: #666;
 }
