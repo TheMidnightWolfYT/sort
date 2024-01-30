@@ -8,7 +8,7 @@ let array = [];
 
 // Function to generate a new array
 function resetArray() {
-    array = [...Array(30).keys()].map(() => Math.floor(Math.random() * 100));
+    array = [...Array(32).keys()].map(() => Math.floor(Math.random() * 100));
     displayArray(array);
 }
 
