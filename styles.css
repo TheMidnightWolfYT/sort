@@ -1,0 +1,20 @@
+/* style.css */
+
+#array-container {
+    width: 600px;
+    height: 400px;
+    display: flex;
+    align-items: flex-end;
+    margin: 20px auto;
+    border: 1px solid black;
+}
+
+#array-container div {
+    background-color: dodgerblue;
+    margin: 2px;
+    width: 20px;
+}
+
+button {
+    margin: 10px;
+}
