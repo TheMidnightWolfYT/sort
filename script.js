@@ -70,9 +70,27 @@ async function selectionSort(arr, delay = 100) {
     }
 }
 
-// Asynchronous Quick Sort with animation
+// Flag to check if it's the initial call of quickSort
+let isInitialCall = true;
+
+async function startQuickSort() {
+    if (isInitialCall) {
+        disableButtons();
+    }
+    try {
+        await quickSort(array);
+    } finally {
+        if (isInitialCall) {
+            enableButtons();
+        }
+        isInitialCall = true; // Reset the flag after sorting is done
+    }
+}
+
 async function quickSort(arr, delay = 100, start = 0, end = arr.length - 1) {
     if (start < end) {
+        // If we're making a recursive call, set the flag to false
+        isInitialCall = false;
         let index = await partition(arr, start, end, delay);
         await Promise.all([
             quickSort(arr, delay, start, index - 1),
@@ -124,15 +142,6 @@ async function startSelectionSort() {
     disableButtons();
     await selectionSort(array);
     enableButtons();
-}
-
-async function startQuickSort() {
-    disableButtons();
-    try {
-        await quickSort(array);
-    } finally {
-        enableButtons();
-    }
 }
 
 // Initialize array on load
