@@ -211,6 +211,63 @@ async function heapSort(arr, delay = 100) {
     }
 }
 
+// Asynchronous Cocktail Shaker Sort with animation
+async function cocktailShakerSort(arr, delay = 100) {
+    let swapped;
+    do {
+        swapped = false;
+        for (let i = 0; i < arr.length - 2; i++) {
+            if (arr[i] > arr[i + 1]) {
+                [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
+                displayArray(arr);
+                await sleep(delay);
+                swapped = true;
+            }
+        }
+        if (!swapped) {
+            break;
+        }
+        swapped = false;
+        for (let i = arr.length - 2; i >= 0; i--) {
+            if (arr[i] > arr[i + 1]) {
+                [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
+                displayArray(arr);
+                await sleep(delay);
+                swapped = true;
+            }
+        }
+    } while (swapped);
+}
+
+// Bitonic Sort
+async function bitonicSort(arr, low, count, dir, delay) {
+    if (count > 1) {
+        var k = count / 2;
+        await bitonicSort(arr, low, k, 1, delay);
+        await bitonicSort(arr, low + k, k, 0, delay);
+        await bitonicMerge(arr, low, count, dir, delay);
+    }
+}
+
+async function bitonicMerge(arr, low, count, dir, delay) {
+    if (count > 1) {
+        var k = count / 2;
+        for (var i = low; i < low + k; i++) {
+            await bitonicCompare(arr, i, i + k, dir, delay);
+        }
+        await bitonicMerge(arr, low, k, dir, delay);
+        await bitonicMerge(arr, low + k, k, dir, delay);
+    }
+}
+
+async function bitonicCompare(arr, i, j, dir, delay) {
+    if (dir === (arr[i] > arr[j])) {
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+        displayArray(arr);
+        await sleep(delay);
+    }
+}
+
 // Button control functions
 function disableButtons() {
     document.querySelectorAll('button').forEach(button => button.disabled = true);
@@ -255,6 +312,20 @@ async function startMergeSort() {
 async function startHeapSort() {
     disableButtons();
     await heapSort(array);
+    enableButtons();
+}
+
+// Function to start Cocktail Shaker Sort
+async function startCocktailShakerSort() {
+    disableButtons();
+    await cocktailShakerSort(array);
+    enableButtons();
+}
+
+async function startBitonicSort() {
+    disableButtons();
+    // Direction 1 means ascending order
+    await bitonicSort(array, 0, array.length, 1, 100);
     enableButtons();
 }
 
